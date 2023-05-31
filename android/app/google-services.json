@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "993607714963",
+    "project_id": "mekal-53bcb",
+    "storage_bucket": "mekal-53bcb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993607714963:android:2af72c34234e97c133a566",
+        "android_client_info": {
+          "package_name": "br.dev.iotech.mekal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993607714963-gg81nd40h4eee951ls9fuacrvobd03ou.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.dev.iotech.mekal",
+            "certificate_hash": "c5cb3992dfe4ab4ec16ae3c6e54713b6509aa55a"
+          }
+        },
+        {
+          "client_id": "993607714963-vhrsmegek7ghl9baf7v77892ddn34tlt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqFa6TZCP9NUvNjL84FqFxoYAF2EEiNrE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993607714963-vhrsmegek7ghl9baf7v77892ddn34tlt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
