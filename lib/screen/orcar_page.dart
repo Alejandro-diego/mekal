@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -28,6 +29,23 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final _cliente = TextEditingController(text: 'consumidor final');
 
+  String iten1 = 'Dinheiro';
+
+  static const menuItems = <String>[
+    'Dinheiro',
+    'Pix',
+    'Cartão Debito',
+    'Cartão Credito',
+    'A Prazo',
+    'Boleto'
+  ];
+  final List<DropdownMenuItem<String>> _dropDownMenuItens = menuItems
+      .map((String value) => DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          ))
+      .toList();
+
   late String _name = "Pancho";
   final List<String> _msj = [];
   @override
@@ -46,17 +64,14 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
       ),
       floatingActionButton: SpeedDialFabWidget(
         secondaryIconsList: const [
-         
           Icons.data_array_outlined,
           Icons.barcode_reader,
         ],
         secondaryIconsText: const [
-        
           "Lista",
           "ScanProduto",
         ],
         secondaryIconsOnPress: [
-        
           () => {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -117,8 +132,8 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                               title: Text(data.producItem[index].description),
                               leading:
                                   Text('${data.producItem[index].qantidade}'),
-                              trailing: Text(data.producItem[index].preco
-                                  .toStringAsFixed(2)),
+                              trailing: Text(UtilBrasilFields.obterReal(
+                                  data.producItem[index].preco)),
                               onLongPress: () {
                                 context
                                     .read<TotalPrice>()
@@ -131,91 +146,121 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                           },
                         ),
                       ),
-                     Text('   Total Sem Desconto R\$ : ${context.watch<TotalPrice>().total.toStringAsFixed(2)}'),
-                       Padding(
+                      Text(
+                          '   Total Sem Desconto R\$ : ${UtilBrasilFields.obterReal(context.watch<TotalPrice>().total)}'),
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
                           height: 40,
                           width: 120,
                           child: TextField(
-                            keyboardType: TextInputType.number ,
+                            keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
-                              suffixText: '%' ,                              
-                              prefixText: 'Desconto: '),
-                              onChanged: (value) => context.read<TotalPrice>().porcentualChangue(value),
+                                suffixText: '%', prefixText: 'Desconto: '),
+                            onChanged: (value) => context
+                                .read<TotalPrice>()
+                                .porcentualChangue(value),
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          'Total R\$: ${(context.watch<TotalPrice>().total - context.watch<TotalPrice>().desconto).toStringAsFixed(2)}',
+                          'Total R\$: ${UtilBrasilFields.obterReal(context.watch<TotalPrice>().total - context.watch<TotalPrice>().desconto, moeda: false)}',
                           style: const TextStyle(fontSize: 30.0),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (data.producItem.isNotEmpty) {
-                            for (var a = 0; a < data.producItem.length; a++) {
-                              _db
-                                  .collection('orçamentos')
-                                  .doc(widget.reference)
-                                  .collection("itens")
-                                  .doc(data.producItem[a].barCode)
-                                  .set({
-                                'description': data.producItem[a].description,
-                                'quantidade': data.producItem[a].qantidade,
-                                'preco': data.producItem[a].preco,
-                                'docref': data.producItem[a].barCode
-                              });
-
-                              _db
-                                  .collection('produc')
-                                  .doc(data.producItem[a].barCode)
-                                  .update({
-                                'stock': data.producItem[a].stock -
-                                    data.producItem[a].qantidade
-                              });
-                            }
-
-                            _db.collection('orçamentos').doc(widget.reference).set({
-                              'cliente': _cliente.text,
-                              'total': datos.total - datos.desconto,
-                              'vendedor': _name,
-                              'reference': widget.reference,
-                              'data': Utils.toDate(DateTime.now()),
-                              'hora': Utils.toTime(DateTime.now())
-                            }, SetOptions(merge: true));
-
-                            context.read<ProducProvider>().clearList();
-                            context.read<TotalPrice>().clearValores();
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        child: const Text('GuardarLista'),
+                      DropdownButton<String>(
+                        value: iten1,
+                        onChanged: ((v) {
+                          setState(() {
+                            debugPrint(v);
+                            iten1 = v!;
+                          });
+                        }),
+                        items: _dropDownMenuItens,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if (data.producItem.isNotEmpty) {
-                            for (var a = 0; a < data.producItem.length; a++) {
-                              _msj.add(
-                                  '${data.producItem[a].qantidade}  ${data.producItem[a].description}  R\$${data.producItem[a].preco}');
-                            }
-                            debugPrint((_msj.toString().replaceAll(',', '\n'))
-                                .replaceAll('[', '')
-                                .replaceAll(']', ''));
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (data.producItem.isNotEmpty) {
+                                for (var a = 0;
+                                    a < data.producItem.length;
+                                    a++) {
+                                  _db
+                                      .collection('orçamentos')
+                                      .doc(widget.reference)
+                                      .collection("itens")
+                                      .doc(data.producItem[a].barCode)
+                                      .set({
+                                        'produto' : data.producItem[a].codigoDeProduto,
+                                    'description':
+                                        data.producItem[a].description,
+                                    'quantidade': data.producItem[a].qantidade,
+                                    'preco': data.producItem[a].preco,
+                                    'docref': data.producItem[a].barCode
+                                  });
 
-                            Share.share(
-                                '${(_msj.toString().replaceAll(',', '\n')).replaceAll('[', '').replaceAll(']', '')}\n Total : ${datos.total - datos.desconto} ');
-                            _msj.clear();
-                          }
-                        },
-                        child: const Icon(Icons.share),
+                                  _db
+                                      .collection('produc')
+                                      .doc(data.producItem[a].barCode)
+                                      .update({
+                                    'stock': data.producItem[a].stock -
+                                        data.producItem[a].qantidade
+                                  });
+                                }
+
+                                _db
+                                    .collection('orçamentos')
+                                    .doc(widget.reference)
+                                    .set({
+                                  'pagamento': iten1,
+                                  'cliente': _cliente.text,
+                                  'total': datos.total - datos.desconto,
+                                  'vendedor': _name,
+                                  'reference': widget.reference,
+                                  'data': Utils.toDate(DateTime.now()),
+                                  'hora': Utils.toTime(DateTime.now())
+                                }, SetOptions(merge: true));
+
+                                context.read<ProducProvider>().clearList();
+                                context.read<TotalPrice>().clearValores();
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: const Text('Finalizar'),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (data.producItem.isNotEmpty) {
+                                for (var a = 0;
+                                    a < data.producItem.length;
+                                    a++) {
+                                  _msj.add(
+                                      '${data.producItem[a].qantidade}  ${data.producItem[a].description}  R\$${data.producItem[a].preco}');
+                                }
+                                debugPrint(
+                                    (_msj.toString().replaceAll(',', '\n'))
+                                        .replaceAll('[', '')
+                                        .replaceAll(']', ''));
+
+                                Share.share(
+                                    '${(_msj.toString().replaceAll(',', '\n')).replaceAll('[', '').replaceAll(']', '')}\n Total : ${UtilBrasilFields.obterReal(datos.total - datos.desconto)} ');
+                                _msj.clear();
+                              }
+                            },
+                            child: const Icon(Icons.share),
+                          ),
+                        ],
                       ),
                     ],
                   )
                 : const Center(
-                    child: Text('data'),
+                    child: Text('Sem Itens'),
                   );
           },
         ),

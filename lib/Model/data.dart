@@ -4,8 +4,10 @@ class Data {
   String description;
   double preco;
   int qantidade;
+  int codigoDeProduto;
 
   Data({
+    required this.codigoDeProduto,
     required this.qantidade,
     required this.stock,
     required this.preco,
@@ -18,7 +20,8 @@ class Data {
       'barCode': barCode,
       'preco': preco,
       'description': description,
-      'quantidade': qantidade
+      'quantidade': qantidade,
+      'produto' : codigoDeProduto
     };
   }
 
@@ -27,5 +30,6 @@ class Data {
         preco = data['price'],
         description = data['description'],
         stock = data['stock'],
-        qantidade = data['quantidade'];
+        qantidade = data['quantidade'],
+        codigoDeProduto = data['produto'];
 }

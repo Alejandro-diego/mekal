@@ -41,6 +41,7 @@ class _VentasPageState extends State<VentasPage> {
                       Text('Data : ${data['data']}'),
                       Text('Hora : ${data['hora']}'),
                       Text('Vendedor : ${data['vendedor']}'),
+                      Text('Pagamento : ${data['pagamento']}'),
                     ],
                   ),
                   // leading: Text('${data['quantidade']}'),

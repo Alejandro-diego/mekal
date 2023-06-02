@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/foundation.dart';
@@ -227,6 +228,11 @@ class _CargarProdutoState extends State<CargarProduto> {
               const Spacer(),
               TextFormField(
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  CentavosInputFormatter()
+                ],
+
                 controller: precio,
                 cursorColor: Colors.amberAccent,
                 // style: const TextStyle(fontSize: 20),
@@ -262,13 +268,15 @@ class _CargarProdutoState extends State<CargarProduto> {
                         'barCode': barCode.text,
                         'reference': reference.text,
                         'stock': int.parse(stock.text),
-                        'preco': double.parse(precio.text)
+                        'preco': double.parse(precio.text.replaceAll(',', '.')),
                       });
-
                       Navigator.of(context).pop();
                     }
                     if (int.parse(stock.text) >= 1) {
-                      _db.collection('producFaltante').doc(barCode.text).delete();
+                      _db
+                          .collection('producFaltante')
+                          .doc(barCode.text)
+                          .delete();
                     }
                   },
                   child: const Text("Add")),

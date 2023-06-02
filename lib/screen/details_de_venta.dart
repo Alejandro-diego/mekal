@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class DetailsOfSales extends StatefulWidget {
-  DetailsOfSales({Key? key, required this.cliente , required this.reference}) : super(key: key);
+  DetailsOfSales({Key? key, required this.cliente, required this.reference})
+      : super(key: key);
   String reference;
   String cliente;
   @override
@@ -51,10 +52,10 @@ class _DetailsOfSalesState extends State<DetailsOfSales> {
                         document.data()! as Map<String, dynamic>;
 
                     return ListTile(
+                      subtitle: Text('Produto : ${data['produto']}'),
                       title: Text(data['description']),
                       leading: Text('${data['quantidade']}'),
                       trailing: Text('Rs ${data['preco']}'),
-                   
                     );
                   }).toList(),
                 );

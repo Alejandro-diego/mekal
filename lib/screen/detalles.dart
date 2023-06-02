@@ -211,33 +211,11 @@ class _DetailPageState extends State<DetailPage> {
                                     ? () async {
                                         context.read<TotalPrice>().addTotal(
                                             data["preco"] * _quantidade);
-                                        /*
 
-                                        _db
-                                            .collection('ventas')
-                                            .doc(widget.reference)
-                                            .collection("itens")
-                                            .doc(data['barCode'])
-                                            .set({
-                                          'description': data["description"],
-                                          'produto': data["produto"],
-                                          'reference': data["reference"],
-                                          'quantidade': _quantidade,
-                                          'preco': data["preco"] * _quantidade,
-                                          'stockdeantes': data['stock'],
-                                          'docref': data['barCode']
-                                        });
-                                        */
-                                        /*
-                                        _db
-                                            .collection("produc")
-                                            .doc(widget.barCode)
-                                            .update({
-                                          'stock': data["stock"] - _quantidade,
-                                        });
-                                        */
                                         context.read<ProducProvider>().addItem(
                                               Data(
+                                                codigoDeProduto:
+                                                    data["produto"],
                                                 qantidade: _quantidade,
                                                 stock: data['stock'],
                                                 preco:
