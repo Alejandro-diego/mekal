@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -21,6 +22,7 @@ class HomePage1 extends StatefulWidget {
 }
 
 class _HomePage1State extends State<HomePage1> {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
   var uuid = const Uuid();
   late String reference = uuid.v1();
   File? file;
@@ -66,7 +68,7 @@ class _HomePage1State extends State<HomePage1> {
               ListTile(
                 title: const Text('Orçar produtos'),
                 onTap: () {
-                   Navigator.of(context).push(
+                  Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => OrcamentoPage(
                         reference: uuid.v1(),
@@ -110,7 +112,6 @@ class _HomePage1State extends State<HomePage1> {
                   FirebaseAuth.instance.signOut();
                 },
               ),
-            
             ],
           ),
         ),
@@ -207,15 +208,45 @@ class _HomePage1State extends State<HomePage1> {
 
     if (!mounted) return;
 
-    Navigator.of(context).push(
+    debugPrint(barcodeScanRes);
+
+   await _db
+        .collection('produto')
+        .where('barCode', isEqualTo: int.parse(barcodeScanRes))
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        debugPrint(doc["produto"].toString());
+
+
+  Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => DetailPage(
-          barCode: barcodeScanRes,
+          produto: doc["produto"],
           isNotShell: true,
           reference: '',
         ),
       ),
     );
+
+
+
+
+
+      }
+    });
+
+    /*
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => DetailPage(
+          produto: 12,
+          isNotShell: true,
+          reference: '',
+        ),
+      ),
+    );*/
   }
 }
 

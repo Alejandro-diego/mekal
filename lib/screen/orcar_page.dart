@@ -286,7 +286,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => DetailPage(
-          barCode: barcodeScanRes,
+          produto: 12,
           isNotShell: false,
           reference: widget.reference,
         ),

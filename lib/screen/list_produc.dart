@@ -42,7 +42,7 @@ class _ListProductState extends State<ListProduct> {
           }),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('produc')
+            .collection('produto')
             // .where('produc' ,arrayContainsAny: ['CERA'])
             .orderBy('description', descending: find)
             .startAt([_searchController.text.toUpperCase()]).endAt(
@@ -63,13 +63,13 @@ class _ListProductState extends State<ListProduct> {
 
               return ListTile(
                 title: Text(data['description']),
-                subtitle: Text(data['barCode']),
+                subtitle: Text('Produto n° :${data['produto']}'),
                 trailing: Text('Rs ${data['preco']}'),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => DetailPage(
-                        barCode: data['barCode'],
+                        produto: data['produto'],
                         isNotShell: widget.forShell,
                         reference: widget.reference,
                       ),

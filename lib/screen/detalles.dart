@@ -11,11 +11,11 @@ import 'caragar_produto.dart';
 class DetailPage extends StatefulWidget {
   DetailPage({
     Key? key,
-    required this.barCode,
+    required this.produto,
     required this.isNotShell,
     required this.reference,
   }) : super(key: key);
-  String barCode;
+  int produto;
   bool isNotShell;
   String reference;
   @override
@@ -23,7 +23,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  CollectionReference produc = FirebaseFirestore.instance.collection("produc");
+  CollectionReference produc = FirebaseFirestore.instance.collection("produto");
 
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   late int _quantidade = 1;
@@ -38,7 +38,7 @@ class _DetailPageState extends State<DetailPage> {
         title: const Text('Detalles'),
       ),
       body: FutureBuilder<DocumentSnapshot>(
-          future: produc.doc(widget.barCode).get(),
+          future: produc.doc(widget.produto.toString()).get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -184,8 +184,8 @@ class _DetailPageState extends State<DetailPage> {
                                     MaterialPageRoute(
                                       builder: (context) => CargarProduto(
                                         description: data["description"],
-                                        barCode: data["barCode"],
-                                        preco: data["preco"],
+                                        barCode: data["barCode"].toString(),
+                                        preco: (data["preco"]).toDouble(),
                                         produto: data["produto"],
                                         reference: data["reference"],
                                         stock: data["stock"],
@@ -197,7 +197,7 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               ElevatedButton(
                                   onPressed: () async {
-                                    produc.doc(data["barCode"]).delete();
+                                    produc.doc(data["produto"]).delete();
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text("Apagar"))
@@ -231,7 +231,7 @@ class _DetailPageState extends State<DetailPage> {
                                     : () {
                                         _db
                                             .collection("producFaltante")
-                                            .doc(widget.barCode)
+                                            .doc(widget.produto.toString())
                                             .set({
                                           'description': data["description"],
                                           'stock': data["stock"],
