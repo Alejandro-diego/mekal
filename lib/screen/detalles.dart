@@ -210,7 +210,7 @@ class _DetailPageState extends State<DetailPage> {
                                 onPressed: data["stock"] != 0
                                     ? () async {
                                         context.read<TotalPrice>().addTotal(
-                                            data["preco"] * _quantidade);
+                                          double.parse( data["preco"].toString() ) * _quantidade );
 
                                         context.read<ProducProvider>().addItem(
                                               Data(
@@ -219,7 +219,7 @@ class _DetailPageState extends State<DetailPage> {
                                                 qantidade: _quantidade,
                                                 stock: data['stock'],
                                                 preco:
-                                                    data["preco"] * _quantidade,
+                                                    double.parse( data["preco"].toString() ) * _quantidade ,
                                                 barCode: data['barCode'],
                                                 description:
                                                     data["description"],

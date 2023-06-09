@@ -219,7 +219,6 @@ class _HomePage1State extends State<HomePage1> {
       for (var doc in querySnapshot.docs) {
         debugPrint(doc["produto"].toString());
 
-
   Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => DetailPage(
@@ -237,16 +236,7 @@ class _HomePage1State extends State<HomePage1> {
       }
     });
 
-    /*
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DetailPage(
-          produto: 12,
-          isNotShell: true,
-          reference: '',
-        ),
-      ),
-    );*/
+   
   }
 }
 

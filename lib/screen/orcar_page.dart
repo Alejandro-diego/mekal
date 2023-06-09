@@ -82,7 +82,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                   ),
                 )
               },
-          () => {scanBarcodeNormal(true)},
+          () => {scanBarcodeNormal()},
         ],
         secondaryBackgroundColor: Colors.black,
         secondaryForegroundColor: Colors.white,
@@ -192,9 +192,10 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                       .collection('orçamentos')
                                       .doc(widget.reference)
                                       .collection("itens")
-                                      .doc(data.producItem[a].barCode)
+                                      .doc(data.producItem[a].codigoDeProduto.toString())
                                       .set({
-                                        'produto' : data.producItem[a].codigoDeProduto,
+                                    'produto':
+                                        data.producItem[a].codigoDeProduto,
                                     'description':
                                         data.producItem[a].description,
                                     'quantidade': data.producItem[a].qantidade,
@@ -203,8 +204,8 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                   });
 
                                   _db
-                                      .collection('produc')
-                                      .doc(data.producItem[a].barCode)
+                                      .collection('produto')
+                                      .doc(data.producItem[a].codigoDeProduto.toString())
                                       .update({
                                     'stock': data.producItem[a].stock -
                                         data.producItem[a].qantidade
@@ -275,22 +276,35 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
     });
   }
 
-  Future<void> scanBarcodeNormal(bool isShell) async {
+  Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
 
     barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+        '#ff6666', 'Cancelar', true, ScanMode.BARCODE);
 
     if (!mounted) return;
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DetailPage(
-          produto: 12,
-          isNotShell: false,
-          reference: widget.reference,
-        ),
-      ),
-    );
+    debugPrint(barcodeScanRes);
+
+    await _db
+        .collection('produto')
+        .where('barCode', isEqualTo: int.parse(barcodeScanRes))
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        debugPrint(doc["produto"].toString());
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DetailPage(
+              produto: doc["produto"],
+              isNotShell: true,
+              reference: '',
+            ),
+          ),
+        );
+      }
+    });
   }
 }

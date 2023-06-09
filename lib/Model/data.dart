@@ -1,6 +1,6 @@
 class Data {
   int stock;
-  String barCode;
+  int barCode;
   String description;
   double preco;
   int qantidade;
@@ -13,6 +13,7 @@ class Data {
     required this.preco,
     required this.barCode,
     required this.description,
+    
   });
 
   Map<String, dynamic> toMap() {
