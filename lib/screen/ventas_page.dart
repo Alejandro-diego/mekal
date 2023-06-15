@@ -46,7 +46,7 @@ class _VentasPageState extends State<VentasPage> {
                   ),
                   // leading: Text('${data['quantidade']}'),
                   trailing: Text('Rs ${data['total'].toStringAsFixed(2)}'),
-                  onLongPress: () {
+                  onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => DetailsOfSales(

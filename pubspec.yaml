@@ -22,8 +22,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   intl: ^0.17.0
   uuid: ^3.0.7
-  image_picker: ^0.8.7+5
-  flutter_slimy_card: ^1.0.2
+  image_picker: ^0.8.7+5  
   speed_dial_fab: ^2.3.0
   share_plus: ^7.0.1
   brasil_fields: ^1.9.1 
@@ -44,4 +43,5 @@ flutter:
   
   assets:
     - assets/pic/
+   
   

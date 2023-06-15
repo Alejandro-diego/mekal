@@ -1,10 +1,10 @@
 class Data {
   int stock;
-  int barCode;
+  String barCode;
   String description;
   double preco;
   int qantidade;
-  int codigoDeProduto;
+  String codigoDeProduto;
 
   Data({
     required this.codigoDeProduto,

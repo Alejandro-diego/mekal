@@ -43,7 +43,7 @@ class _ListProductState extends State<ListProduct> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('produto')
-            // .where('produc' ,arrayContainsAny: ['CERA'])
+            //.where('stock' ,isEqualTo : null)
             .orderBy('description', descending: find)
             .startAt([_searchController.text.toUpperCase()]).endAt(
                 ['${_searchController.text.toUpperCase()}\uf8ff']).snapshots(),
@@ -62,19 +62,33 @@ class _ListProductState extends State<ListProduct> {
                   document.data()! as Map<String, dynamic>;
 
               return ListTile(
+                isThreeLine: true,
                 title: Text(data['description']),
-                subtitle: Text('Produto n° :${data['produto']}'),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Produto n° :${data['produto']}'),
+                    Text(
+                      'Estoque : ${data['stock']}',
+                      style: TextStyle(
+                          color:
+                              data['stock'] == "0" ? Colors.red : Colors.white),
+                    ),
+                  ],
+                ),
                 trailing: Text('Rs ${data['preco']}'),
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => DetailPage(
-                        produto: data['produto'],
-                        isNotShell: widget.forShell,
-                        reference: widget.reference,
+                  if (data['stock'] != null) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          produto: data['produto'],
+                          isNotShell: widget.forShell,
+                          reference: widget.reference,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
               );
             }).toList(),

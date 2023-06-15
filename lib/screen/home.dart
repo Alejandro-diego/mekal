@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mekal/screen/ventas_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
-import 'package:flutter_slimy_card/flutter_slimy_card.dart';
 import 'caragar_produto.dart';
 import 'detalles.dart';
 import 'list_produc.dart';
@@ -40,136 +39,102 @@ class _HomePage1State extends State<HomePage1> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('MekalStock'),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName: Text(name),
-                accountEmail: Text(email),
-                currentAccountPicture: GestureDetector(
-                  child: Container(
-                    color: Colors.transparent,
-                    child: photo.isNotEmpty
-                        ? Image.memory(base64Decode(photo))
-                        : const Icon(
-                            Icons.person,
-                            size: 30,
-                          ),
-                  ),
-                  onLongPress: () {
-                    pickImage();
-                  },
-                ),
-              ),
-              ListTile(
-                title: const Text('Orçar produtos'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => OrcamentoPage(
-                        reference: uuid.v1(),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: const Text('Lista de produto'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ListProduct(
-                        forShell: true,
-                        reference: "",
-                      ),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: const Text('Adicionar Produtos'),
-                onTap: () {
-                  Navigator.of(context).push(_cargarProducto());
-                },
-              ),
-              ListTile(
-                title: const Text('Orçamentos'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const VentasPage(),
-                    ),
-                  );
-                },
-              ),
-              ListTile(
-                title: const Text('Sair'),
-                onTap: () {
-                  FirebaseAuth.instance.signOut();
-                },
-              ),
-            ],
-          ),
-        ),
-        body: ListView(
+      appBar: AppBar(
+        title: const Text('MekalStock'),
+      ),
+      drawer: Drawer(
+        child: ListView(
           children: <Widget>[
-            const SizedBox(
-              height: 40,
+            UserAccountsDrawerHeader(
+              accountName: Text(name),
+              accountEmail: Text(email),
+              currentAccountPicture: GestureDetector(
+                child: Container(
+                  color: Colors.transparent,
+                  child: photo.isNotEmpty
+                      ? Image.memory(base64Decode(photo))
+                      : const Icon(
+                          Icons.person,
+                          size: 30,
+                        ),
+                ),
+                onLongPress: () {
+                  pickImage();
+                },
+              ),
             ),
-            FlutterSlimyCard(
-              color: Colors.white,
-              topCardHeight: 160,
-              bottomCardHeight: 120,
-              topCardWidget: topWidget(),
-              bottomCardWidget: bottomWidget(),
+            ListTile(
+              title: const Text('Orçar produtos'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => OrcamentoPage(
+                      reference: uuid.v1(),
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Lista de produto'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ListProduct(
+                      forShell: true,
+                      reference: "",
+                    ),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Adicionar Produtos'),
+              onTap: () {
+                Navigator.of(context).push(_cargarProducto());
+              },
+            ),
+            ListTile(
+              title: const Text('Orçamentos'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const VentasPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Sair'),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+              },
             ),
           ],
-        ));
-  }
-
-  topWidget() {
-    return const SafeArea(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 90,
-            child: Image(
-              image: AssetImage('assets/pic/logo1.jpg'),
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Text(
-            'Procure itens',
-            style: TextStyle(color: Colors.blue, fontSize: 24),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-        ],
+        ),
       ),
-    );
-  }
-
-  bottomWidget() {
-    return Container(
-      margin: const EdgeInsets.only(top: 5),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Flexible(
-            child: ElevatedButton(
-                onPressed: () {
-                  scanBarcodeNormal();
-                },
-                child: const Icon(Icons.search)),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            const Spacer(),
+            Container(
+              padding: const EdgeInsets.all(30),
+             
+              width: size.width - 50,
+              height: 400,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  image: const DecorationImage(
+                    
+                    image: AssetImage('assets/pic/logo2.jpg'),
+                  ),),
+            ),
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }
@@ -210,7 +175,7 @@ class _HomePage1State extends State<HomePage1> {
 
     debugPrint(barcodeScanRes);
 
-   await _db
+    await _db
         .collection('produto')
         .where('barCode', isEqualTo: int.parse(barcodeScanRes))
         .limit(1)
@@ -219,24 +184,17 @@ class _HomePage1State extends State<HomePage1> {
       for (var doc in querySnapshot.docs) {
         debugPrint(doc["produto"].toString());
 
-  Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => DetailPage(
-          produto: doc["produto"],
-          isNotShell: true,
-          reference: '',
-        ),
-      ),
-    );
-
-
-
-
-
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DetailPage(
+              produto: doc["produto"],
+              isNotShell: true,
+              reference: '',
+            ),
+          ),
+        );
       }
     });
-
-   
   }
 }
 

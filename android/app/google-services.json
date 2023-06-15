@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "993607714963",
-    "project_id": "mekal-53bcb",
-    "storage_bucket": "mekal-53bcb.appspot.com"
+    "project_number": "145475469623",
+    "project_id": "mekal-2c670",
+    "storage_bucket": "mekal-2c670.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:993607714963:android:2af72c34234e97c133a566",
+        "mobilesdk_app_id": "1:145475469623:android:fd237dfecc8ed61b10dab2",
         "android_client_info": {
           "package_name": "br.dev.iotech.mekal"
         }
       },
       "oauth_client": [
         {
-          "client_id": "993607714963-gg81nd40h4eee951ls9fuacrvobd03ou.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "br.dev.iotech.mekal",
-            "certificate_hash": "c5cb3992dfe4ab4ec16ae3c6e54713b6509aa55a"
-          }
-        },
-        {
-          "client_id": "993607714963-vhrsmegek7ghl9baf7v77892ddn34tlt.apps.googleusercontent.com",
+          "client_id": "145475469623-brk255kdvb7lokdrd5rv09qmif08mk34.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDqFa6TZCP9NUvNjL84FqFxoYAF2EEiNrE"
+          "current_key": "AIzaSyDjk4khQmXCvW1u-4sCFsovP_CwhA4CtV4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "993607714963-vhrsmegek7ghl9baf7v77892ddn34tlt.apps.googleusercontent.com",
+              "client_id": "145475469623-brk255kdvb7lokdrd5rv09qmif08mk34.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

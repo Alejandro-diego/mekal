@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../Model/data.dart';
 import '../Model/producOrc.dart';
-import 'caragar_produto.dart';
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {
@@ -15,7 +14,7 @@ class DetailPage extends StatefulWidget {
     required this.isNotShell,
     required this.reference,
   }) : super(key: key);
-  int produto;
+  String produto;
   bool isNotShell;
   String reference;
   @override
@@ -38,7 +37,7 @@ class _DetailPageState extends State<DetailPage> {
         title: const Text('Detalles'),
       ),
       body: FutureBuilder<DocumentSnapshot>(
-          future: produc.doc(widget.produto.toString()).get(),
+          future: produc.doc(widget.produto).get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -103,7 +102,7 @@ class _DetailPageState extends State<DetailPage> {
                           Positioned(
                             top: 60,
                             left: 10,
-                            child: data["stock"] != 0
+                            child: int.parse(data["stock"]) != 0
                                 ? Text(
                                     'Quantidade disponivel :  ${data["stock"]}',
                                     style: const TextStyle(color: Colors.amber),
@@ -136,7 +135,7 @@ class _DetailPageState extends State<DetailPage> {
                                         style: const TextStyle(fontSize: 18),
                                       ),
                                       IconButton(
-                                        onPressed: _quantidade < data["stock"]
+                                        onPressed: _quantidade <  int.parse( data["stock"])
                                             ? () {
                                                 setState(() {
                                                   _quantidade++;
@@ -151,18 +150,23 @@ class _DetailPageState extends State<DetailPage> {
                           Positioned(
                             bottom: 60,
                             left: 10,
-                            child: Row(
+                            child: 
+                             data["preco"] != null
+                            
+                          ?   Row(
                               children: [
                                 const Text("Precio de venda R\$ :  "),
+                              
                                 Text(
-                                  '${data["preco"] * _quantidade}',
+                                  '${double.parse(data["preco"].replaceAll(',','.')) * _quantidade}',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 30,
                                       color: Colors.green),
                                 ),
                               ],
-                            ),
+                            )
+                           :  const Text("SEM Preço de venda ", style: TextStyle(color: Colors.red),),
                           ),
                         ],
                       ),
@@ -178,23 +182,7 @@ class _DetailPageState extends State<DetailPage> {
                                 },
                                 child: const Text("OK"),
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => CargarProduto(
-                                        description: data["description"],
-                                        barCode: data["barCode"].toString(),
-                                        preco: (data["preco"]).toDouble(),
-                                        produto: data["produto"],
-                                        reference: data["reference"],
-                                        stock: data["stock"],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: const Text("Edit"),
-                              ),
+                           
                               ElevatedButton(
                                   onPressed: () async {
                                     produc.doc(data["produto"]).delete();
@@ -207,19 +195,33 @@ class _DetailPageState extends State<DetailPage> {
                             /// add produc
                             children: [
                               ElevatedButton(
-                                onPressed: data["stock"] != 0
-                                    ? () async {
+                                onPressed: int.parse( data["stock"]) <= 0 
+
+                                ? () {
+                                        _db
+                                            .collection("producFaltante")
+                                            .doc(widget.produto)
+                                            .set({
+                                          'description': data["description"],
+                                          'stock': data["stock"],
+                                        });
+                                      }
+
+
+
+
+                                    : () async {
                                         context.read<TotalPrice>().addTotal(
-                                          double.parse( data["preco"].toString() ) * _quantidade );
+                                          double.parse( data["preco"].toString().replaceAll(',', '.') ) * _quantidade );
 
                                         context.read<ProducProvider>().addItem(
                                               Data(
                                                 codigoDeProduto:
                                                     data["produto"],
                                                 qantidade: _quantidade,
-                                                stock: data['stock'],
+                                                stock: int.parse( data['stock']),
                                                 preco:
-                                                    double.parse( data["preco"].toString() ) * _quantidade ,
+                                                    double.parse( data["preco"].toString().replaceAll(',', '.') ) * _quantidade ,
                                                 barCode: data['barCode'],
                                                 description:
                                                     data["description"],
@@ -227,16 +229,8 @@ class _DetailPageState extends State<DetailPage> {
                                             );
 
                                         Navigator.of(context).pop();
-                                      }
-                                    : () {
-                                        _db
-                                            .collection("producFaltante")
-                                            .doc(widget.produto.toString())
-                                            .set({
-                                          'description': data["description"],
-                                          'stock': data["stock"],
-                                        });
                                       },
+                                     
                                 child: const Text("Agregar Produto"),
                               ),
                             ],

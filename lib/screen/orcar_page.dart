@@ -192,7 +192,8 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                       .collection('orçamentos')
                                       .doc(widget.reference)
                                       .collection("itens")
-                                      .doc(data.producItem[a].codigoDeProduto.toString())
+                                      .doc(data.producItem[a].codigoDeProduto
+                                          .toString())
                                       .set({
                                     'produto':
                                         data.producItem[a].codigoDeProduto,
@@ -205,10 +206,12 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
 
                                   _db
                                       .collection('produto')
-                                      .doc(data.producItem[a].codigoDeProduto.toString())
+                                      .doc(data.producItem[a].codigoDeProduto
+                                          .toString())
                                       .update({
-                                    'stock': data.producItem[a].stock -
-                                        data.producItem[a].qantidade
+                                    'stock': (data.producItem[a].stock -
+                                            data.producItem[a].qantidade)
+                                        .toString()
                                   });
                                 }
 
