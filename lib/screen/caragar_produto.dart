@@ -262,20 +262,20 @@ class _CargarProdutoState extends State<CargarProduto> {
               ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      _db.collection('produto').doc(produto.text).set({
+                      _db.collection('produtos').doc(produto.text).set({
                         'description': descripcion.text.toUpperCase(),
-                        'produto': int.parse(produto.text),
-                        'barCode': int.parse(barCode.text),
+                        'produto': produto.text,
+                        'barCode': barCode.text,
                         'reference': reference.text,
-                        'stock': int.parse(stock.text),
-                        'preco': double.parse(precio.text.replaceAll(',', '.')),
+                        'stock': stock.text,
+                        'preco': precio.text.replaceAll(',', '.'),
                       });
                       Navigator.of(context).pop();
                     }
                     if (int.parse(stock.text) >= 1) {
                       _db
                           .collection('producFaltante')
-                          .doc(barCode.text)
+                          .doc(produto.text)
                           .delete();
                     }
                   },

@@ -1,8 +1,8 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mekal/Model/total.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 import '../Model/data.dart';
 import '../Model/producOrc.dart';
 
@@ -22,11 +22,11 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  CollectionReference produc = FirebaseFirestore.instance.collection("produto");
+  CollectionReference produc =
+      FirebaseFirestore.instance.collection("produtos");
 
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   late int _quantidade = 1;
-  var uuid = const Uuid();
 
   late int unit = 1;
 
@@ -135,7 +135,8 @@ class _DetailPageState extends State<DetailPage> {
                                         style: const TextStyle(fontSize: 18),
                                       ),
                                       IconButton(
-                                        onPressed: _quantidade <  int.parse( data["stock"])
+                                        onPressed: _quantidade <
+                                                int.parse(data["stock"])
                                             ? () {
                                                 setState(() {
                                                   _quantidade++;
@@ -150,23 +151,26 @@ class _DetailPageState extends State<DetailPage> {
                           Positioned(
                             bottom: 60,
                             left: 10,
-                            child: 
-                             data["preco"] != null
-                            
-                          ?   Row(
-                              children: [
-                                const Text("Precio de venda R\$ :  "),
-                              
-                                Text(
-                                  '${double.parse(data["preco"].replaceAll(',','.')) * _quantidade}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 30,
-                                      color: Colors.green),
-                                ),
-                              ],
-                            )
-                           :  const Text("SEM Preço de venda ", style: TextStyle(color: Colors.red),),
+                            child: data["preco"] != null
+                                ? Row(
+                                    children: [
+                                      const Text("Precio de venda :  "),
+                                      Text(
+                                        UtilBrasilFields.obterReal(double.parse(
+                                                data["preco"]
+                                                    .replaceAll(',', '.')) *
+                                            _quantidade),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 30,
+                                            color: Colors.green),
+                                      ),
+                                    ],
+                                  )
+                                : const Text(
+                                    "SEM Preço de venda ",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
                           ),
                         ],
                       ),
@@ -182,10 +186,9 @@ class _DetailPageState extends State<DetailPage> {
                                 },
                                 child: const Text("OK"),
                               ),
-                           
                               ElevatedButton(
                                   onPressed: () async {
-                                    produc.doc(data["produto"]).delete();
+                                    produc.doc(data["produtos"]).delete();
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text("Apagar"))
@@ -195,9 +198,8 @@ class _DetailPageState extends State<DetailPage> {
                             /// add produc
                             children: [
                               ElevatedButton(
-                                onPressed: int.parse( data["stock"]) <= 0 
-
-                                ? () {
+                                onPressed: int.parse(data["stock"]) <= 0
+                                    ? () {
                                         _db
                                             .collection("producFaltante")
                                             .doc(widget.produto)
@@ -206,22 +208,25 @@ class _DetailPageState extends State<DetailPage> {
                                           'stock': data["stock"],
                                         });
                                       }
-
-
-
-
                                     : () async {
                                         context.read<TotalPrice>().addTotal(
-                                          double.parse( data["preco"].toString().replaceAll(',', '.') ) * _quantidade );
+                                            double.parse(data["preco"]
+                                                    .toString()
+                                                    .replaceAll(',', '.')) *
+                                                _quantidade);
 
                                         context.read<ProducProvider>().addItem(
                                               Data(
                                                 codigoDeProduto:
                                                     data["produto"],
                                                 qantidade: _quantidade,
-                                                stock: int.parse( data['stock']),
-                                                preco:
-                                                    double.parse( data["preco"].toString().replaceAll(',', '.') ) * _quantidade ,
+                                                stock: int.parse(data['stock']),
+                                                preco: double.parse(
+                                                        data["preco"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                                ',', '.')) *
+                                                    _quantidade,
                                                 barCode: data['barCode'],
                                                 description:
                                                     data["description"],
@@ -230,7 +235,6 @@ class _DetailPageState extends State<DetailPage> {
 
                                         Navigator.of(context).pop();
                                       },
-                                     
                                 child: const Text("Agregar Produto"),
                               ),
                             ],

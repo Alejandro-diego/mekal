@@ -1,4 +1,6 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -38,11 +40,13 @@ class _DetailsOfSalesState extends State<DetailsOfSales> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
-                  return const Text('Something went wrong');
+                  return const Text('Algo deu errado');
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text("Carregando");
+                  return const Center(
+                    child: CupertinoActivityIndicator(),
+                  );
                 }
 
                 return ListView(
@@ -55,7 +59,9 @@ class _DetailsOfSalesState extends State<DetailsOfSales> {
                       subtitle: Text('Produto : ${data['produto']}'),
                       title: Text(data['description']),
                       leading: Text('${data['quantidade']}'),
-                      trailing: Text('Rs ${data['preco']}'),
+                      trailing: Text(
+                        UtilBrasilFields.obterReal(data['preco']),
+                      ),
                     );
                   }).toList(),
                 );

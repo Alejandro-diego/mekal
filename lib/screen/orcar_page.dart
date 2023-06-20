@@ -205,7 +205,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                   });
 
                                   _db
-                                      .collection('produto')
+                                      .collection('produtos')
                                       .doc(data.producItem[a].codigoDeProduto
                                           .toString())
                                       .update({
@@ -290,19 +290,20 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
     debugPrint(barcodeScanRes);
 
     await _db
-        .collection('produto')
-        .where('barCode', isEqualTo: int.parse(barcodeScanRes))
+        .collection('produtos')
+        .where('barCode', isEqualTo: barcodeScanRes)
         .limit(1)
         .get()
         .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         debugPrint(doc["produto"].toString());
+        
 
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => DetailPage(
               produto: doc["produto"],
-              isNotShell: true,
+              isNotShell: false,
               reference: '',
             ),
           ),

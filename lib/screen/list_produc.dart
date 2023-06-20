@@ -42,7 +42,7 @@ class _ListProductState extends State<ListProduct> {
           }),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('produto')
+            .collection('produtos')
             //.where('stock' ,isEqualTo : null)
             .orderBy('description', descending: find)
             .startAt([_searchController.text.toUpperCase()]).endAt(
