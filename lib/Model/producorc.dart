@@ -1,12 +1,15 @@
-
-
-
 import 'package:flutter/foundation.dart';
 
 import 'data.dart';
 
 class ProducProvider with ChangeNotifier {
   final List<Data> _items = [];
+
+  void updateIten(int index, double price , int quantia) {
+    _items[index].preco = price;
+    _items[index].qantidade = quantia;
+    notifyListeners();
+  }
 
   void addItem(Data itemData) {
     _items.add(itemData);
@@ -15,7 +18,7 @@ class ProducProvider with ChangeNotifier {
 
   void clearList() {
     _items.clear();
-     notifyListeners();
+    notifyListeners();
   }
 
   void removeItem(Data itemData) {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mekal/Model/total.dart';
 import 'package:provider/provider.dart';
 import '../Model/data.dart';
-import '../Model/producOrc.dart';
+import '../Model/producorc.dart';
 
 // ignore: must_be_immutable
 class DetailPage extends StatefulWidget {
@@ -232,6 +232,8 @@ class _DetailPageState extends State<DetailPage> {
                                                     data["description"],
                                               ),
                                             );
+
+                                           
 
                                         Navigator.of(context).pop();
                                       },

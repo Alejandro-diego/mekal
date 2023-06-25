@@ -6,7 +6,7 @@ import 'package:mekal/Model/total.dart';
 import 'package:mekal/screen/home.dart';
 import 'package:provider/provider.dart';
 
-import 'Model/producOrc.dart';
+import 'Model/producorc.dart';
 import 'screen/login_page.dart';
 
 void main() async {

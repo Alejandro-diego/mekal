@@ -1,4 +1,6 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'details_de_venta.dart';
@@ -45,7 +47,14 @@ class _VentasPageState extends State<VentasPage> {
                     ],
                   ),
                   // leading: Text('${data['quantidade']}'),
-                  trailing: Text('Rs ${data['total'].toStringAsFixed(2)}'),
+                  trailing: Column(
+                    children: [
+                      Text(
+                        UtilBrasilFields.obterReal(data['total']),
+                      ),
+                      CupertinoSwitch(value: false, onChanged: (bool a) {})
+                    ],
+                  ),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
