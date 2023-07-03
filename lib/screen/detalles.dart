@@ -230,10 +230,12 @@ class _DetailPageState extends State<DetailPage> {
                                                 barCode: data['barCode'],
                                                 description:
                                                     data["description"],
+                                                precoUnitario: double.parse(
+                                                    data["preco"]
+                                                        .toString()
+                                                        .replaceAll(',', '.')),
                                               ),
                                             );
-
-                                           
 
                                         Navigator.of(context).pop();
                                       },

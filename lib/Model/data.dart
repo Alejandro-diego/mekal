@@ -5,15 +5,16 @@ class Data {
   double preco;
   int qantidade;
   String codigoDeProduto;
+  double precoUnitario;
 
   Data({
+    required this.precoUnitario,
     required this.codigoDeProduto,
     required this.qantidade,
     required this.stock,
     required this.preco,
     required this.barCode,
     required this.description,
-    
   });
 
   Map<String, dynamic> toMap() {
@@ -22,12 +23,14 @@ class Data {
       'preco': preco,
       'description': description,
       'quantidade': qantidade,
-      'produto' : codigoDeProduto
+      'produto': codigoDeProduto,
+      'precoUnitario' : precoUnitario
     };
   }
 
   Data.fromFirestore(Map<String, dynamic> data)
       : barCode = data['barCode'] ?? 1000,
+      precoUnitario = data['precoUnitario'],
         preco = data['price'],
         description = data['description'],
         stock = data['stock'],

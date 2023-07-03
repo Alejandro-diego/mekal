@@ -1,8 +1,9 @@
+
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'details_de_venta.dart';
 
 class VentasPage extends StatefulWidget {
@@ -13,6 +14,7 @@ class VentasPage extends StatefulWidget {
 }
 
 class _VentasPageState extends State<VentasPage> {
+  late bool integadro = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +25,7 @@ class _VentasPageState extends State<VentasPage> {
         stream: FirebaseFirestore.instance.collection('orçamentos').snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
-            return const Text('Deu Merda');
+            return const Text('Deu Error');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Text('Cargando');
@@ -52,7 +54,10 @@ class _VentasPageState extends State<VentasPage> {
                       Text(
                         UtilBrasilFields.obterReal(data['total']),
                       ),
-                      CupertinoSwitch(value: false, onChanged: (bool a) {})
+                    data['integrado']
+                    ?  const Text('Integrado', style: TextStyle(color: Colors.green),)
+                    : const  Text('No Integrado', style: TextStyle(color: Colors.orange),)
+
                     ],
                   ),
                   onTap: () {

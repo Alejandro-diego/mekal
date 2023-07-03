@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,10 @@ class HomePage1 extends StatefulWidget {
 class _HomePage1State extends State<HomePage1> {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   var uuid = const Uuid();
-  late String reference = uuid.v1();
+  late String id = uuid.v1();
+  late int reference = DateTime.now().millisecondsSinceEpoch;
+  late Random random = Random();
+  
   File? file;
   XFile? imagePiked;
   List<File> filiList = [];
@@ -68,10 +72,22 @@ class _HomePage1State extends State<HomePage1> {
             ListTile(
               title: const Text('Orçar produtos'),
               onTap: () {
+
+  String generatedNumber = '';
+                for (int i = 0; i < 9; i++) {
+                  generatedNumber += ((random.nextInt(9) + 1).toString());
+                }
+
+
+
+
+
+
+
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => OrcamentoPage(
-                      reference: uuid.v1(),
+                      reference: generatedNumber,
                     ),
                   ),
                 );
@@ -82,10 +98,8 @@ class _HomePage1State extends State<HomePage1> {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ListProduct(
-                      forShell: true,
-                      reference: "",
-                    ),
+                    builder: (context) =>
+                        ListProduct(forShell: true, reference: ''),
                   ),
                 );
               },
@@ -112,6 +126,7 @@ class _HomePage1State extends State<HomePage1> {
                 FirebaseAuth.instance.signOut();
               },
             ),
+         
           ],
         ),
       ),
@@ -121,16 +136,15 @@ class _HomePage1State extends State<HomePage1> {
             const Spacer(),
             Container(
               padding: const EdgeInsets.all(30),
-             
               width: size.width - 50,
               height: 400,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  image: const DecorationImage(
-                    
-                    image: AssetImage('assets/pic/logo2.jpg'),
-                  ),),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                image: const DecorationImage(
+                  image: AssetImage('assets/pic/logo2.jpg'),
+                ),
+              ),
             ),
             const Spacer(),
           ],

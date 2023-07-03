@@ -47,6 +47,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
 
   late String _name = "Pancho";
   final List<String> _msj = [];
+  final List<Map> _item = [];
 
   @override
   void initState() {
@@ -213,6 +214,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                     'preco': data.producItem[a].preco,
                                     'docref': data.producItem[a].barCode
                                   });
+                                  /*
 
                                   _db
                                       .collection('produtos')
@@ -222,13 +224,36 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                     'stock': (data.producItem[a].stock -
                                             data.producItem[a].qantidade)
                                         .toString()
+                                  });*/
+
+                                  _item.add({
+                                    'codigo': int.parse(
+                                        data.producItem[a].codigoDeProduto),
+                                    'quantidade': data.producItem[a].qantidade,
+                                    'preco': data.producItem[a].precoUnitario,
                                   });
                                 }
+                                _db
+                                    .collection('pedidos')
+                                    .doc(widget.reference)
+                                    .set({
+                                  'codigo_loja': 139,
+                                  'codigo': int.parse(widget.reference),
+                                  'data': Utils.toDateWhitBar(DateTime.now()),
+                                  'hora': Utils.toTime(DateTime.now()),
+                                  'volor_total': double.parse(
+                                      (datos.total - datos.desconto)
+                                          .toStringAsFixed(2)),
+                                  'informacoes_cliente': null,
+                                  'itens': FieldValue.arrayUnion(_item),
+                                  'integrado': false
+                                }, SetOptions(merge: true));
 
                                 _db
                                     .collection('orçamentos')
                                     .doc(widget.reference)
                                     .set({
+                                  'integrado': false,
                                   'pagamento': iten1,
                                   'cliente': _cliente.text,
                                   'total': datos.total - datos.desconto,
@@ -256,7 +281,21 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                     a++) {
                                   _msj.add(
                                       '${data.producItem[a].qantidade}  ${data.producItem[a].description}  R\$${data.producItem[a].preco}');
+                                  _item.add({
+                                    'codigo':
+                                        data.producItem[a].codigoDeProduto,
+                                    'quantidade': data.producItem[a].qantidade,
+                                    'preco': data.producItem[a].preco
+                                  });
                                 }
+
+                                _db
+                                    .collection('sharepedidos')
+                                    .doc(widget.reference)
+                                    .set(
+                                        {'itens': FieldValue.arrayUnion(_item)},
+                                        SetOptions(merge: true));
+
                                 debugPrint(
                                     (_msj.toString().replaceAll(',', '\n'))
                                         .replaceAll('[', '')
@@ -344,7 +383,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Estoque   :${(stock -quantidades) + unit} '),
+                    Text('Estoque   :${(stock - quantidades) + unit} '),
                     Row(
                       children: [
                         const Text('Quantidade :'),

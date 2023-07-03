@@ -1,10 +1,7 @@
 import 'package:intl/intl.dart';
 
 class Utils {
-
-  static String toDateTime(DateTime dateTime) {  
-    
-    
+  static String toDateTime(DateTime dateTime) {
     final time = DateFormat.Hm('pt').format(dateTime);
 
     return time;
@@ -18,5 +15,10 @@ class Utils {
   static String toTime(DateTime dateTime) {
     final time = DateFormat.Hm('pt').format(dateTime);
     return time;
+  }
+
+  static String toDateWhitBar(DateTime dateTime) {
+    final date = DateFormat('dd/MM/yyyy').format(dateTime);
+    return date;
   }
 }
