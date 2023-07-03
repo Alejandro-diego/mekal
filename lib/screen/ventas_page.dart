@@ -1,5 +1,3 @@
-
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -22,7 +20,10 @@ class _VentasPageState extends State<VentasPage> {
         title: const Text('Orçamentos'),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('orçamentos').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('orçamentos')
+            .orderBy('hora', descending: true)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
             return const Text('Deu Error');
@@ -54,10 +55,15 @@ class _VentasPageState extends State<VentasPage> {
                       Text(
                         UtilBrasilFields.obterReal(data['total']),
                       ),
-                    data['integrado']
-                    ?  const Text('Integrado', style: TextStyle(color: Colors.green),)
-                    : const  Text('No Integrado', style: TextStyle(color: Colors.orange),)
-
+                      data['integrado']
+                          ? const Text(
+                              'Integrado',
+                              style: TextStyle(color: Colors.green),
+                            )
+                          : const Text(
+                              'No Integrado',
+                              style: TextStyle(color: Colors.orange),
+                            )
                     ],
                   ),
                   onTap: () {

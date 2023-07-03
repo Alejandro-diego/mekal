@@ -5,9 +5,13 @@ class TotalPrice with ChangeNotifier {
 
   double _total = 0.0;
   double _desconto = 0.0;
+  double _percentual = 0.0;
+  
 
   double get total => _total;
   double get desconto => _desconto;
+  double get percentual => _percentual;
+  
   void clearValores() {
     valores = [];
     _total = 0.0;
@@ -16,6 +20,10 @@ class TotalPrice with ChangeNotifier {
 
   void porcentualChangue(String value) {
     debugPrint(((_total * double.parse(value)) / 100).toString());
+
+    _percentual = double.parse(value);
+
+    
 
     _desconto = ((_total * double.parse(value)) / 100);
     notifyListeners();

@@ -237,12 +237,14 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                     .collection('pedidos')
                                     .doc(widget.reference)
                                     .set({
-                                  'codigo_loja': 139,
+                                      'percentual_desconto': datos.percentual,
+                                  'codigo_loja': 1,
+                                  'valor_desconto': datos.desconto,
                                   'codigo': int.parse(widget.reference),
                                   'data': Utils.toDateWhitBar(DateTime.now()),
                                   'hora': Utils.toTime(DateTime.now()),
                                   'volor_total': double.parse(
-                                      (datos.total - datos.desconto)
+                                      (datos.total )
                                           .toStringAsFixed(2)),
                                   'informacoes_cliente': null,
                                   'itens': FieldValue.arrayUnion(_item),

@@ -22,6 +22,13 @@ class _DetailsOfSalesState extends State<DetailsOfSales> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Referencia :${widget.reference}',
+              style: const TextStyle(fontSize: 20, color: Colors.green),
+            ),
+          ),
           Container(
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(10),
