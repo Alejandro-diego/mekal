@@ -227,7 +227,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                   });*/
 
                                   _item.add({
-                                    'codigo': int.parse(
+                                    'codigo_produto': int.parse(
                                         data.producItem[a].codigoDeProduto),
                                     'quantidade': data.producItem[a].qantidade,
                                     'preco': data.producItem[a].precoUnitario,
@@ -239,14 +239,27 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                     .set({
                                       'percentual_desconto': datos.percentual,
                                   'codigo_loja': 1,
+                                  'observacoes' : 'sem Observacoes',
                                   'valor_desconto': datos.desconto,
                                   'codigo': int.parse(widget.reference),
                                   'data': Utils.toDateWhitBar(DateTime.now()),
                                   'hora': Utils.toTime(DateTime.now()),
                                   'volor_total': double.parse(
-                                      (datos.total )
+                                      (datos.total - datos.desconto )
                                           .toStringAsFixed(2)),
-                                  'informacoes_cliente': null,
+                                  'informacoes_cliente': {
+                                    'cpf_cnpj' : '09.473.073/0001-75',
+                                    'nome': 'WG DISTRIBUIDORA DE PROD. DE HIG LTDA',
+                                    'telefone':'5433244648',
+                                    'email' : 'wg_distribuidora@hotmail.com',
+                                    'endereco' : 'RUA MAUA',
+                                    'numero' : '1207',
+                                    'bairro' : 'CENTRO',
+                                    'municipio': 'IBIRUBA',
+                                    'celular' : '(54) 9 91139329',
+                                    'estado': 'RS',
+                                    'cep': '98200-000',                                    
+                                  },
                                   'itens': FieldValue.arrayUnion(_item),
                                   'integrado': false
                                 }, SetOptions(merge: true));

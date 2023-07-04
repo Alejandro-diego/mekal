@@ -27,7 +27,7 @@ class _HomePage1State extends State<HomePage1> {
   late String id = uuid.v1();
   late int reference = DateTime.now().millisecondsSinceEpoch;
   late Random random = Random();
-  
+
   File? file;
   XFile? imagePiked;
   List<File> filiList = [];
@@ -72,17 +72,10 @@ class _HomePage1State extends State<HomePage1> {
             ListTile(
               title: const Text('Orçar produtos'),
               onTap: () {
-
-  String generatedNumber = '';
+                String generatedNumber = '';
                 for (int i = 0; i < 9; i++) {
                   generatedNumber += ((random.nextInt(9) + 1).toString());
                 }
-
-
-
-
-
-
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -126,7 +119,6 @@ class _HomePage1State extends State<HomePage1> {
                 FirebaseAuth.instance.signOut();
               },
             ),
-         
           ],
         ),
       ),
