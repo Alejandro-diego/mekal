@@ -297,7 +297,7 @@ class _OrcamentoPageState extends State<OrcamentoPage> {
                                   _msj.add(
                                       '${data.producItem[a].qantidade}  ${data.producItem[a].description}  R\$${data.producItem[a].preco}');
                                   _item.add({
-                                    'codigo':
+                                    'codigo_produto':
                                         data.producItem[a].codigoDeProduto,
                                     'quantidade': data.producItem[a].qantidade,
                                     'preco': data.producItem[a].preco
